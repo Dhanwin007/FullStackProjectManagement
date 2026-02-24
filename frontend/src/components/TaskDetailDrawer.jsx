@@ -44,7 +44,6 @@ const TaskDetailDrawer = ({ taskId, projectId, onClose }) => {
   const fetchProjectMembers = useCallback(async () => {
     try {
       const res = await api.get(`/projects/${projectId}/members`);
-      // Most VTU-based project structures return members where user info is an array from aggregation
       setProjectMembers(res.data.data || []);
     } catch (err) {
       console.error("Error fetching members", err);
@@ -67,7 +66,7 @@ const TaskDetailDrawer = ({ taskId, projectId, onClose }) => {
         title: updates.title || task.title,
         status: updates.status || task.status,
         description: updates.description !== undefined ? updates.description : task.description,
-        assignedTo: updates.assignedTo !== undefined ? updates.assignedTo : task.assignedTo?._id,
+        assignedTo: updates.assignedTo !== undefined ? updates.assignedTo : (task.assignedTo?._id || task.assignedTo),
         priority: task.priority
       };
 
@@ -199,15 +198,22 @@ const TaskDetailDrawer = ({ taskId, projectId, onClose }) => {
                     <div className="h-8 w-8 rounded-full overflow-hidden border bg-white flex items-center justify-center">
                         {task.assignedTo?.avatar?.url ? <img src={task.assignedTo.avatar.url} className="h-full w-full object-cover" /> : <User size={14} className="text-slate-300"/>}
                     </div>
+                    {/* FIXED ASSIGNEE SELECT */}
                     <select 
                         className="bg-transparent text-xs font-black text-slate-700 outline-none cursor-pointer w-full"
-                        value={task.assignedTo?._id || ""}
+                        value={task.assignedTo?._id || task.assignedTo || ""}
                         onChange={(e) => updateTaskData({ assignedTo: e.target.value || null })}
                     >
                         <option value="">Unassigned</option>
                         {projectMembers.map(m => {
+                            // Extract user correctly regardless of aggregation structure
                             const u = Array.isArray(m.user) ? m.user[0] : m.user;
-                            return u ? <option key={u._id} value={u._id}>{u.username}</option> : null;
+                            if (!u?._id) return null;
+                            return (
+                              <option key={u._id} value={u._id}>
+                                {u.username}
+                              </option>
+                            );
                         })}
                     </select>
                 </div>
@@ -289,4 +295,3 @@ const TaskDetailDrawer = ({ taskId, projectId, onClose }) => {
 };
 
 export default TaskDetailDrawer;
-
