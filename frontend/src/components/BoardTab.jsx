@@ -3,22 +3,23 @@ import api from '../api/axios';
 import { Plus, Loader2, AlertCircle, LayoutDashboard } from 'lucide-react';
 import TaskCard from './TaskCard';
 import CreateTaskModal from './CreateTaskModal';
+import TaskDetailDrawer from './TaskDetailDrawer'; // 1. Component Imported
 
-const BoardTab = ({ projectId ,userRole}) => {
+const BoardTab = ({ projectId, userRole }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null); // 2. Selection state added
 
-  // 1. Permissions Logic (Checking sessionStorage for Admin rights)
+  // 1. Permissions Logic
   const user = JSON.parse(sessionStorage.getItem('user'));
-   const currentUserRole = userRole?.toLowerCase();
+  const currentUserRole = userRole?.toLowerCase();
   const canManage = currentUserRole === 'admin' || currentUserRole === 'project_admin';
 
   // 2. Fetch Tasks using your specific path
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
-      // Path as requested: starts with /projects/tasks/
       const res = await api.get(`/projects/tasks/${projectId}`);
       setTasks(res.data.data || []);
     } catch (err) {
@@ -32,7 +33,7 @@ const BoardTab = ({ projectId ,userRole}) => {
     if (projectId) fetchTasks();
   }, [fetchTasks]);
 
-  // 3. Define Column Structure (Matching your TaskStatusEnum)
+  // 3. Define Column Structure
   const columns = [
     { id: 'todo', label: 'To Do', color: 'bg-slate-400' },
     { id: 'in_progress', label: 'In Progress', color: 'bg-blue-500' },
@@ -75,12 +76,10 @@ const BoardTab = ({ projectId ,userRole}) => {
       {/* --- KANBAN BOARD --- */}
       <div className="flex gap-6 overflow-x-auto pb-8 min-h-[550px] custom-scrollbar">
         {columns.map((column) => {
-          // Filter tasks locally into columns
           const columnTasks = tasks.filter(t => t.status?.toLowerCase() === column.id);
 
           return (
             <div key={column.id} className="w-80 flex-shrink-0 flex flex-col">
-              {/* Column Title */}
               <div className="flex items-center justify-between mb-4 px-3">
                 <div className="flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${column.color}`}></span>
@@ -91,7 +90,6 @@ const BoardTab = ({ projectId ,userRole}) => {
                 </div>
               </div>
 
-              {/* Task List Container */}
               <div className="bg-slate-50/50 border border-slate-200/60 rounded-[2rem] p-3 flex-1 space-y-4">
                 {columnTasks.map((task) => (
                   <TaskCard 
@@ -100,12 +98,11 @@ const BoardTab = ({ projectId ,userRole}) => {
                     projectId={projectId} 
                     onUpdate={fetchTasks}
                     canManage={canManage}
-                    // This handles navigation to the details page/drawer
-                    onClick={() => console.log("Task Clicked:", task._id)} 
+                    // 3. Updated onClick to set selection for drawer
+                    onClick={() => setSelectedTaskId(task._id)} 
                   />
                 ))}
 
-                {/* Empty State Illustration */}
                 {columnTasks.length === 0 && (
                   <div className="flex flex-col items-center justify-center py-16 opacity-30">
                     <AlertCircle size={32} className="mb-2 text-slate-400" />
@@ -113,7 +110,6 @@ const BoardTab = ({ projectId ,userRole}) => {
                   </div>
                 )}
 
-                {/* Quick Add at bottom for Admins */}
                 {canManage && (
                   <button 
                     onClick={() => setIsModalOpen(true)}
@@ -128,6 +124,18 @@ const BoardTab = ({ projectId ,userRole}) => {
           );
         })}
       </div>
+
+      {/* --- 4. TASK DETAIL DRAWER (Conditional Rendering) --- */}
+      {selectedTaskId && (
+        <TaskDetailDrawer 
+          taskId={selectedTaskId}
+          projectId={projectId}
+          onClose={() => {
+            setSelectedTaskId(null);
+            fetchTasks(); // Refresh board in case subtasks changed
+          }}
+        />
+      )}
 
       {/* --- TASK CREATION MODAL --- */}
       <CreateTaskModal 

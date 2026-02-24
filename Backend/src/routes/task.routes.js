@@ -45,6 +45,7 @@ router
     validateProjectPermission([
       UserRolesEnum.ADMIN,
       UserRolesEnum.PROJECT_ADMIN,
+      UserRolesEnum.MEMBER
     ]),
     createTaskValidator(),
     validate,

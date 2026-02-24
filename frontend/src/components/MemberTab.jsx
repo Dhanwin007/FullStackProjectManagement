@@ -4,11 +4,15 @@ import { UserPlus, X, Mail, Loader2, ShieldCheck, UserMinus, Lock } from 'lucide
 
 const MemberTab = ({ projectId, userRole }) => {
   const [members, setMembers] = useState([]);
-  const [inviteData, setInviteData] = useState({ email: '', role: 'MEMBER' });
+  const [inviteData, setInviteData] = useState({ email: '', role: 'member' });
   const [isInviting, setIsInviting] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Normalize userRole to lowercase for robust permission checking
+  // --- ADDED THIS TO FIX THE ERROR ---
+  const userDataSession = JSON.parse(sessionStorage.getItem('user')) || {};
+  const currentUserData = userDataSession.user || {}; 
+  // ------------------------------------
+
   const currentUserRole = userRole?.toLowerCase();
   const isAdmin = currentUserRole === 'admin' || currentUserRole === 'project_admin';
 
@@ -32,7 +36,6 @@ const MemberTab = ({ projectId, userRole }) => {
     if (!isAdmin) return;
     setIsInviting(true);
 
-    // FIX: Send lowercase role to match your backend constants ('member', 'project_admin')
     const payload = {
       email: inviteData.email.trim().toLowerCase(),
       role: inviteData.role.toLowerCase() 
@@ -40,11 +43,10 @@ const MemberTab = ({ projectId, userRole }) => {
 
     try {
       await api.post(`/projects/${projectId}/members`, payload);
-      setInviteData({ email: '', role: 'MEMBER' });
+      setInviteData({ email: '', role: 'member' });
       fetchMembers();
       alert("Member added successfully!");
     } catch (err) {
-      console.error("Validation Errors:", err.response?.data?.errors);
       alert(err.response?.data?.message || "User not found or validation failed");
     } finally {
       setIsInviting(false);
@@ -53,9 +55,9 @@ const MemberTab = ({ projectId, userRole }) => {
 
   const handleRoleUpdate = async (userId, newRole) => {
     try {
-      // FIX: Ensure newRole is sent in lowercase ('member' vs 'MEMBER')
+      const formattedRole = newRole.toLowerCase();
       await api.put(`/projects/${projectId}/members/${userId}`, { 
-        newRole: newRole.toLowerCase() 
+        newRole: formattedRole 
       });
       fetchMembers();
     } catch (err) {
@@ -82,7 +84,7 @@ const MemberTab = ({ projectId, userRole }) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
       
-      {/* 🟢 Invite Column */}
+      {/* Invite Column */}
       <div className="lg:col-span-1">
         <div className={`bg-white p-6 rounded-3xl border border-slate-200 shadow-sm sticky top-32 transition-opacity ${!isAdmin ? 'opacity-60' : ''}`}>
           <div className="flex items-center gap-2 mb-6">
@@ -98,7 +100,7 @@ const MemberTab = ({ projectId, userRole }) => {
               <input 
                 type="email" 
                 placeholder="name@email.com"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
                 value={inviteData.email}
                 onChange={(e) => setInviteData({...inviteData, email: e.target.value})}
                 required
@@ -108,18 +110,18 @@ const MemberTab = ({ projectId, userRole }) => {
             <div className="space-y-1">
               <label className="text-[10px] font-black uppercase text-slate-400 ml-1">Assign Role</label>
               <select 
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm font-bold text-slate-600 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none text-sm font-bold text-slate-600"
                 value={inviteData.role}
                 onChange={(e) => setInviteData({...inviteData, role: e.target.value})}
                 disabled={!isAdmin}
               >
-                <option value="MEMBER">Member</option>
-                <option value="PROJECT_ADMIN">Project Admin</option>
+                <option value="member">Member</option>
+                <option value="project_admin">Project Admin</option>
               </select>
             </div>
             <button 
               disabled={!isAdmin || isInviting} 
-              className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all disabled:opacity-50 shadow-lg shadow-slate-200"
+              className="w-full bg-slate-900 text-white py-3.5 rounded-xl font-bold hover:bg-slate-800 transition-all disabled:opacity-50"
             >
               {isInviting ? "Adding..." : "Add Member"}
             </button>
@@ -127,7 +129,7 @@ const MemberTab = ({ projectId, userRole }) => {
         </div>
       </div>
 
-      {/* 🔵 Table Column */}
+      {/* Table Column */}
       <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
           <h3 className="font-bold text-slate-800">Members ({members.length})</h3>
@@ -143,33 +145,31 @@ const MemberTab = ({ projectId, userRole }) => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {members.map((m, index) => {
-                // FIX: Support both array-wrapped users (lookup) or flattened users (unwind)
                 const userData = Array.isArray(m.user) ? m.user[0] : m.user;
                 if (!userData) return null;
 
-                // Normalize roles for comparison
-                const isMainAdmin = m.role?.toLowerCase() === 'admin';
+                const roleLower = m.role?.toLowerCase();
+                const isMainAdmin = roleLower === 'admin'; 
                 const canManage = isAdmin && !isMainAdmin;
 
                 return (
                   <tr key={userData._id || index} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="p-4 flex items-center gap-3">
-                      <img src={userData.avatar.url} className="h-10 w-10 rounded-full border border-slate-200 object-cover shadow-sm" />
+                      <img src={userData.avatar?.url} className="h-10 w-10 rounded-full border border-slate-200 object-cover shadow-sm" />
                       <div>
                         <p className="font-bold text-sm text-slate-900 leading-none mb-1">{userData.username}</p>
-                        <p className="text-[10px] text-slate-400 font-medium">{userData.fullName}</p>
+                        <p className="text-[10px] text-slate-400 font-medium">{userData.email}</p>
                       </div>
                     </td>
                     <td className="p-4">
                       {canManage ? (
                         <select 
-                          // FIX: Display current role correctly even if backend sends lowercase
-                          value={m.role?.toUpperCase()}
+                          value={roleLower} 
                           onChange={(e) => handleRoleUpdate(userData._id, e.target.value)}
-                          className="text-[10px] font-black uppercase bg-blue-50 text-blue-600 px-2 py-1 rounded-md cursor-pointer border-none outline-none hover:bg-blue-100 transition-colors"
+                          className="text-[10px] font-black uppercase bg-blue-50 text-blue-600 px-2 py-1 rounded-md cursor-pointer border-none outline-none"
                         >
-                          <option value="PROJECT_ADMIN">Project Admin</option>
-                          <option value="MEMBER">Member</option>
+                          <option value="project_admin">Project Admin</option>
+                          <option value="member">Member</option>
                         </select>
                       ) : (
                         <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-md ${
@@ -180,10 +180,11 @@ const MemberTab = ({ projectId, userRole }) => {
                       )}
                     </td>
                     <td className="p-4 text-right">
-                      {canManage && (
+                      {/* FIXED THE VARIABLE HERE: changed user._id to currentUserData._id */}
+                      {canManage && userData._id !== currentUserData._id && (
                         <button 
                           onClick={() => handleRemoveMember(userData._id)}
-                          className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                          className="p-2 text-slate-300 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
                         >
                           <UserMinus size={18} />
                         </button>

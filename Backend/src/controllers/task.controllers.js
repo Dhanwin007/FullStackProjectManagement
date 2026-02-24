@@ -157,7 +157,7 @@ const getTaskById = asyncHandler(async (req, res) => {
 });
 const updateTask = asyncHandler(async (req, res) => {
   const { projectId, taskId } = req.params;
-  const { title, status, assignedTo} = req.body;
+  const { title, status, assignedTo,description} = req.body;
   if (!AvailableTaskStatuses.includes(status)) {
     throw new ApiError(404, 'status in Invalid');
   }
@@ -192,6 +192,7 @@ const updateTask = asyncHandler(async (req, res) => {
     {
       title,
       status,
+      description,
       assignedTo,
       attachments,
     },
