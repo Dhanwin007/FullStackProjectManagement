@@ -76,7 +76,7 @@ const TaskCard = ({ task, projectId, onUpdate, canManage, onClick }) => {
 
         <div className="flex items-center gap-2">
            <img 
-             src={task.assignedTo?.avatar || `https://ui-avatars.com/api/?name=${task.assignedTo?.username || 'U'}`} 
+             src={task.assignedTo?.avatar.url || `https://ui-avatars.com/api/?name=${task.assignedTo?.username || 'U'}`} 
              className="h-6 w-6 rounded-full border border-slate-200 shadow-sm" 
              title={task.assignedTo?.username} 
            />
