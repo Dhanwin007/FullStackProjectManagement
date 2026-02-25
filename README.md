@@ -1,7 +1,8 @@
-🚀 TaskFlow: Real-Time Project Management Platform
+#🚀 TaskFlow: Real-Time Project Management Platform
+
 A high-performance, full-stack project management solution designed for real-time collaboration. This platform enables users to manage complex workflows through an interactive Kanban interface while communicating instantly with team members.
 
-🌟 Key Features
+# Key Features
 Real-Time Collaboration: Integrated Socket.io for instantaneous updates and live team chat within project workspaces.
 
 Dynamic Kanban Board: A fully interactive drag-and-drop interface for managing task states (Todo, In Progress, Completed).
@@ -14,7 +15,7 @@ Project Analytics: Backend infrastructure ready for data aggregation using Mongo
 
 Asset Management: Secure image and file handling integrated with Cloudinary and Multer.
 
-🛠️ Tech Stack
+# Tech Stack
 Frontend: React.js, Tailwind CSS, Recharts (for data visualization).
 
 Backend: Node.js, Express.js.
@@ -25,7 +26,7 @@ Communication: Socket.io (WebSockets), Nodemailer (SMTP).
 
 Cloud Services: Cloudinary (Storage), Gmail (Email Relay).
 
-📈 Challenges & Achievements
+# Challenges & Achievements
 1. The Migration to Production-Ready SMTP
 Challenge: Initially, the system used Mailtrap for email testing, which limited the project to a "sandbox" environment where real users (or interviewers) couldn't receive verification codes.
 Achievement: Successfully migrated the entire notification engine to Gmail SMTP using Google App Passwords. This involved reconfiguring the transport layer to handle SSL (Port 465) and ensuring high deliverability, making the project truly "live."
@@ -38,7 +39,7 @@ Achievement: Implemented a WebSocket layer that broadcasts project changes insta
 Challenge: Managing CORS issues and deployment complexity when running React and Express on different ports (5173 and 8000).
 Achievement: Developed a strategy to serve the React production build (dist folder) directly through the Express backend using express.static. This unified the origin, eliminated CORS errors, and simplified the deployment pipeline for local network testing.
 
-🚦 Getting Started
+# Getting Started
 Prerequisites
 Node.js (v16+)
 
@@ -58,14 +59,14 @@ SMTP_USER=your_email@gmail.com
 SMTP_PASS=your_16_character_app_password
 Installation
 Bash
-# Install backend dependencies
+ Install backend dependencies
 npm install
 
-# Install frontend dependencies
+Install frontend dependencies
 cd client
 npm install
 
-# Run in development mode
+ Run in development mode
 npm run dev
 📜 Future Roadmap
 Advanced Analytics: Implementing a full dashboard using MongoDB $group and $match stages.
