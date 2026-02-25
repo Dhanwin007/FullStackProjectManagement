@@ -1,4 +1,4 @@
-#🚀 TaskFlow: Real-Time Project Management Platform
+# TaskFlow: Real-Time Project Management Platform
 
 A high-performance, full-stack project management solution designed for real-time collaboration. This platform enables users to manage complex workflows through an interactive Kanban interface while communicating instantly with team members.
 
