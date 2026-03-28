@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Auth } from './pages/Auth';
 import Dashboard from './pages/Dashboard';
  import ProjectWorkspace from './pages/ProjectWorkspace';
+ import ResetPassword from './pages/ResetPassword';
 
 // 1. Protected Route: Only for logged-in users
 const ProtectedRoute = ({ children }) => {
@@ -48,6 +49,7 @@ function App() {
           } 
         />
         <Route path="/project/:projectId" element={<ProjectWorkspace />} />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
        
 
         {/* Default Redirects */}
