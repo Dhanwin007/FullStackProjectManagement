@@ -128,12 +128,12 @@ const login = asyncHandler(async (req, res) => {
     '-password -refreshToken -emailVerificationToken -emailVerificationExpiry', //these fields wil be removed while fetching data
   );
 
-  const options = {
-    httpOnly: true,
-    secure: false,
-    sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000
-  };
+ const options = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 24 * 60 * 60 * 1000,
+};
   return res
     .status(200)
     .cookie('accessToken', accessToken, options)
