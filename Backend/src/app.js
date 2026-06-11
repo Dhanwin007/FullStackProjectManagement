@@ -25,12 +25,14 @@ import authRouter from './routes/auth.routes.js';
 import projectRouter from './routes/project.routes.js';
 import taskRouter from './routes/task.routes.js';
 import chatRouter from './routes/chat.routes.js';
+//import analyticsRouter from './routes/analytics.routes.js';
 
 app.use('/api/v1/healthcheck', healthCheckRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/projects/tasks', taskRouter);
 app.use("/api/v1/chat", chatRouter);
+//app.use('/api/v1/analytics', analyticsRouter);
 
 app.get('/', (req, res) => {
   res.send('Server is alive');

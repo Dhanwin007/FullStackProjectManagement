@@ -12,6 +12,7 @@ import BoardTab from '../components/BoardTab';
 import MemberTab from '../components/MemberTab';
 import SettingsTab from '../components/SettingsTab';
 import ProjectChat from '../components/ProjectChat'; // Using your existing component
+import AnalyticsTab from '../components/AnalyticsTab';
 
 const ProjectWorkspace = () => {
   const { projectId } = useParams();
@@ -79,7 +80,7 @@ const ProjectWorkspace = () => {
 
             {/* Tab Navigation */}
             <nav className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-              {['board', 'team', 'settings'].map((tab) => (
+              {['board', 'analytics', 'team', 'settings'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -101,6 +102,7 @@ const ProjectWorkspace = () => {
       <main className="max-w-7xl mx-auto p-8">
         {activeTab === 'board' && <BoardTab projectId={projectId} userRole={project?.role} />}
         {activeTab === 'team' && <MemberTab projectId={projectId} userRole={project?.role} />}
+        {activeTab === 'analytics' && (<AnalyticsTab projectId={projectId} />)}
         {activeTab === 'settings' && (
           <SettingsTab 
             project={project} 

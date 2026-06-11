@@ -151,7 +151,7 @@ export const Auth = ({ isLogin }) => {
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-1"><Shield size={16} /> Assign Role</label>
                   <select className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 bg-white" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}>
                     <option value="member">Team Member</option>
-                    <option value="admin">Project Admin</option>
+                    <option value="admin">Admin</option>
                   </select>
                 </div>
               </>
