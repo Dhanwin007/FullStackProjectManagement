@@ -58,6 +58,8 @@ const sendEmail = async (options) => {
   //     pass: process.env.SMTP_PASS, // Your 16-character App Password
   //   },
   // });
+console.log("SMTP_USER:", process.env.SMTP_USER);
+console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
   const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -67,8 +69,7 @@ const sendEmail = async (options) => {
     pass: process.env.SMTP_PASS,
   },
 });
-await transporter.verify();
-console.log("✅ SMTP connection verified");
+
 
   const mail = {
     // Best practice: use your actual email in the 'from' field to avoid spam filters
