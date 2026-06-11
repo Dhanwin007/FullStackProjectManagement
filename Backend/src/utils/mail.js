@@ -1,4 +1,5 @@
 import Mailgen from 'mailgen';
+import { Resend } from 'resend';
 
 import nodemailer from 'nodemailer';
 // for sendng the email u need to provide all these data
@@ -38,6 +39,60 @@ import nodemailer from 'nodemailer';
 //   }
 // };
 
+// const sendEmail = async (options) => {
+//   const mailGenerator = new Mailgen({
+//     theme: 'default',
+//     product: {
+//       name: 'Task Manager',
+//       link: 'https://taskmanagerlink.com',
+//     },
+//   });
+  
+//   const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
+//   const emailHtml = mailGenerator.generate(options.mailgenContent);
+
+//   // const transporter = nodemailer.createTransport({
+//   //   // Changed to Gmail settings
+//   //   service: 'gmail',
+//   //   auth: {
+//   //     user: process.env.SMTP_USER, // Your Gmail address
+//   //     pass: process.env.SMTP_PASS, // Your 16-character App Password
+//   //   },
+//   // });
+// console.log("SMTP_USER:", process.env.SMTP_USER);
+// console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
+//  const transporter = nodemailer.createTransport({
+//     host: "smtp-relay.brevo.com", 
+//     port: 465,                    // Changed from 587 to 465
+//     secure: true,                 // CRUCIAL: Must be set to true for port 465
+//     auth: {
+//       user: process.env.SMTP_USER,
+//       pass: process.env.SMTP_PASS,
+//     },
+//     connectionTimeout: 15000,     // Gives the cloud network 15 seconds to connect
+//     socketTimeout: 15000,
+//   });
+
+//   const mail = {
+//     // Best practice: use your actual email in the 'from' field to avoid spam filters
+//     from: `"Task Manager" <${process.env.SMTP_USER}>`,
+//     to: options.email,
+//     subject: options.subject,
+//     text: emailTextual,
+//     html: emailHtml,
+//   };
+
+//   try {
+//     await transporter.sendMail(mail);
+//   } catch (error) {
+//     console.error(
+//       'Error occurred while sending the mail. Make sure Gmail App Password is correct in .env',
+//       error // Logging the actual error helps debugging
+//     );
+//   }
+// };
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 const sendEmail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: 'default',
@@ -47,47 +102,24 @@ const sendEmail = async (options) => {
     },
   });
   
-  const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
+  // Note: Resend takes HTML content directly, plaintext generation isn't strictly necessary here
   const emailHtml = mailGenerator.generate(options.mailgenContent);
 
-  // const transporter = nodemailer.createTransport({
-  //   // Changed to Gmail settings
-  //   service: 'gmail',
-  //   auth: {
-  //     user: process.env.SMTP_USER, // Your Gmail address
-  //     pass: process.env.SMTP_PASS, // Your 16-character App Password
-  //   },
-  // });
-console.log("SMTP_USER:", process.env.SMTP_USER);
-console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
- const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com", 
-    port: 465,                    // Changed from 587 to 465
-    secure: true,                 // CRUCIAL: Must be set to true for port 465
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 15000,     // Gives the cloud network 15 seconds to connect
-    socketTimeout: 15000,
-  });
-
-  const mail = {
-    // Best practice: use your actual email in the 'from' field to avoid spam filters
-    from: `"Task Manager" <${process.env.SMTP_USER}>`,
-    to: options.email,
-    subject: options.subject,
-    text: emailTextual,
-    html: emailHtml,
-  };
+  console.log("Attempting to send email via Resend API...");
+  console.log("RESEND_API_KEY EXISTS:", !!process.env.RESEND_API_KEY);
 
   try {
-    await transporter.sendMail(mail);
+    // This sends over a standard HTTPS web request (Port 443) which Render CANNOT block
+    await resend.emails.send({
+      from: 'Task Manager <onboarding@resend.dev>', // Keep this exact default testing sender address
+      to: options.email,                             // Must be your own registered Resend account email for testing
+      subject: options.subject,
+      html: emailHtml,
+    });
+
+    console.log("Email sent successfully via Resend API!");
   } catch (error) {
-    console.error(
-      'Error occurred while sending the mail. Make sure Gmail App Password is correct in .env',
-      error // Logging the actual error helps debugging
-    );
+    console.error('Error occurred while sending mail via Resend:', error);
   }
 };
 
