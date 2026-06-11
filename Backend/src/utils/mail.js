@@ -61,8 +61,9 @@ const sendEmail = async (options) => {
 console.log("SMTP_USER:", process.env.SMTP_USER);
 console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
   const transporter = nodemailer.createTransport({
+  service:"gmail",  
   host: "smtp.gmail.com",
-  port: 465,
+  port: 587,
   secure: true,
   auth: {
     user: process.env.SMTP_USER,
