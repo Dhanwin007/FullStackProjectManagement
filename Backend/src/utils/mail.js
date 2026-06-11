@@ -64,7 +64,7 @@ console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
   service:"gmail",  
   host: "smtp.gmail.com",
   port: 587,
-  secure: true,
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
