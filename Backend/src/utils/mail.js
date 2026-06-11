@@ -37,6 +37,7 @@ import nodemailer from 'nodemailer';
 //     );
 //   }
 // };
+
 const sendEmail = async (options) => {
   const mailGenerator = new Mailgen({
     theme: 'default',
@@ -49,14 +50,23 @@ const sendEmail = async (options) => {
   const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
   const emailHtml = mailGenerator.generate(options.mailgenContent);
 
+  // const transporter = nodemailer.createTransport({
+  //   // Changed to Gmail settings
+  //   service: 'gmail',
+  //   auth: {
+  //     user: process.env.SMTP_USER, // Your Gmail address
+  //     pass: process.env.SMTP_PASS, // Your 16-character App Password
+  //   },
+  // });
   const transporter = nodemailer.createTransport({
-    // Changed to Gmail settings
-    service: 'gmail',
-    auth: {
-      user: process.env.SMTP_USER, // Your Gmail address
-      pass: process.env.SMTP_PASS, // Your 16-character App Password
-    },
-  });
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
   const mail = {
     // Best practice: use your actual email in the 'from' field to avoid spam filters

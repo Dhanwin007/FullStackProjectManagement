@@ -11,7 +11,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     req.cookies?.accessToken ||
     req
       .header('Authorization')
-      ?.repalce(
+      ?.replace(
         'Bearer ',
         '',
       ); /*"?" represents optional chaining i.e, if req.cookies are present then th
