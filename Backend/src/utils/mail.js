@@ -104,6 +104,12 @@ const sendEmail = async (options) => {
   
   // Note: Resend takes HTML content directly, plaintext generation isn't strictly necessary here
   const emailHtml = mailGenerator.generate(options.mailgenContent);
+  console.log("MAIL CONTENT:");
+console.log(JSON.stringify(options.mailgenContent, null, 2));
+
+console.log("EMAIL HTML START");
+console.log(emailHtml);
+console.log("EMAIL HTML END");
 
   console.log("Attempting to send email via Resend API...");
   console.log("RESEND_API_KEY EXISTS:", !!process.env.RESEND_API_KEY);
@@ -142,6 +148,10 @@ const emailVerificationMailgenContent = function (username, verificationUrl) {
   };
   return email;
 };
+const resetUrl =
+  `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`;
+
+console.log("RESET URL:", resetUrl);
 const forgotPasswordMailgenContent = function (username, passwordResetUrl) {
   let email = {
     body: {
