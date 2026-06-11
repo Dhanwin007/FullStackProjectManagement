@@ -148,10 +148,10 @@ const emailVerificationMailgenContent = function (username, verificationUrl) {
   };
   return email;
 };
-const resetUrl =
-  `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`;
+// const resetUrl =
+//   `${process.env.FORGOT_PASSWORD_REDIRECT_URL}/${unHashedToken}`;
 
-console.log("RESET URL:", resetUrl);
+// console.log("RESET URL:", resetUrl);
 const forgotPasswordMailgenContent = function (username, passwordResetUrl) {
   let email = {
     body: {
