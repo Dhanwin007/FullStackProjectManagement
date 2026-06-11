@@ -67,6 +67,8 @@ const sendEmail = async (options) => {
     pass: process.env.SMTP_PASS,
   },
 });
+await transporter.verify();
+console.log("✅ SMTP connection verified");
 
   const mail = {
     // Best practice: use your actual email in the 'from' field to avoid spam filters
