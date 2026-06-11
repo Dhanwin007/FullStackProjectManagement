@@ -61,15 +61,16 @@ const sendEmail = async (options) => {
 console.log("SMTP_USER:", process.env.SMTP_USER);
 console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
  const transporter = nodemailer.createTransport({
-    host: "smtp-relay.brevo.com", // From your Brevo 'SMTP server' field
-    port: 587,                    // From your Brevo 'Port' field
-    secure: false,                // Always false for port 587
+    host: "smtp-relay.brevo.com", 
+    port: 465,                    // Changed from 587 to 465
+    secure: true,                 // CRUCIAL: Must be set to true for port 465
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
+    connectionTimeout: 15000,     // Gives the cloud network 15 seconds to connect
+    socketTimeout: 15000,
   });
-
 
   const mail = {
     // Best practice: use your actual email in the 'from' field to avoid spam filters
