@@ -60,16 +60,15 @@ const sendEmail = async (options) => {
   // });
 console.log("SMTP_USER:", process.env.SMTP_USER);
 console.log("SMTP_PASS EXISTS:", !!process.env.SMTP_PASS);
-  const transporter = nodemailer.createTransport({
-  service:"gmail",  
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+ const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com", // From your Brevo 'SMTP server' field
+    port: 587,                    // From your Brevo 'Port' field
+    secure: false,                // Always false for port 587
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
 
   const mail = {
