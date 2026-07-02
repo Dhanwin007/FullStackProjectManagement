@@ -66,6 +66,8 @@ router
     validateProjectPermission([
       UserRolesEnum.ADMIN,
       UserRolesEnum.PROJECT_ADMIN,
+      UserRolesEnum.MEMBER
+      
     ]),
     createSubTaskValidator(),
     validate,
@@ -76,12 +78,14 @@ router
   .route('/:projectId/st/:subTaskId')
   .put(validateProjectPermission([ // 4. ADDED ROLES (Standard users shouldn't edit subtasks usually)
       UserRolesEnum.ADMIN, 
-      UserRolesEnum.PROJECT_ADMIN 
+      UserRolesEnum.PROJECT_ADMIN,
+      UserRolesEnum.MEMBER 
     ]), updateSubTask)
   .delete(
     validateProjectPermission([
       UserRolesEnum.ADMIN,
       UserRolesEnum.PROJECT_ADMIN,
+      UserRolesEnum.MEMBER
     ]),
     deleteSubTask,
   );
