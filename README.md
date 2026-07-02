@@ -1,7 +1,7 @@
 # 🚀 TaskFlow
 
 A modern full-stack project management platform built with **React**, **Node.js**, **Express.js**, and **MongoDB**. TaskFlow enables teams to collaborate efficiently through an interactive Kanban board, real-time communication, secure authentication, and project analytics.
-
+Live on : https://frontend-project-management-snowy.vercel.app/login
 ---
 
 ## ✨ Features
@@ -116,7 +116,7 @@ cd taskflow
 ## Install Backend Dependencies
 
 ```bash
-cd server
+cd backend
 npm install
 ```
 
@@ -127,7 +127,7 @@ npm install
 Open another terminal.
 
 ```bash
-cd client
+cd fronted
 npm install
 ```
 
@@ -136,7 +136,7 @@ npm install
 ## Start the Backend Server
 
 ```bash
-cd server
+cd backend
 npm run dev
 ```
 
@@ -153,7 +153,7 @@ http://localhost:8000
 Open another terminal.
 
 ```bash
-cd client
+cd frontend
 npm run dev
 ```
 
@@ -170,14 +170,14 @@ http://localhost:5173
 ### Frontend
 
 ```bash
-cd client
+cd frontend
 npm run build
 ```
 
 ### Backend
 
 ```bash
-cd server
+cd backend
 npm start
 ```
 
