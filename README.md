@@ -1,76 +1,297 @@
-# TaskFlow: Real-Time Project Management Platform
+# 🚀 TaskFlow
 
-A high-performance, full-stack project management solution designed for real-time collaboration. This platform enables users to manage complex workflows through an interactive Kanban interface while communicating instantly with team members.
+A modern full-stack project management platform built with **React**, **Node.js**, **Express.js**, and **MongoDB**. TaskFlow enables teams to collaborate efficiently through an interactive Kanban board, real-time communication, secure authentication, and project analytics.
 
-# Key Features
-Real-Time Collaboration: Integrated Socket.io for instantaneous updates and live team chat within project workspaces.
+---
 
-Dynamic Kanban Board: A fully interactive drag-and-drop interface for managing task states (Todo, In Progress, Completed).
+## ✨ Features
 
-Secure Authentication: Robust user security using JWT (JSON Web Tokens) and HTTP-only cookies, featuring a complete email verification and password reset flow.
+* 🔐 Secure Authentication using JWT and HTTP-only Cookies
+* 📧 Password Reset and role based permissions
+* 📋 Create and Manage Projects
+* ✅ Create, Update, Delete, and Organize Tasks
+* 📌 Interactive Drag-and-Drop Kanban Board
+* 💬 Real-Time Team Chat using Socket.io
+* 📊 Project Analytics Dashboard
+* ☁️ Secure File & Image Uploads with Cloudinary
 
-Professional Notifications: Automated, branded email communication powered by Nodemailer, Mailgen, and Gmail SMTP (App Passwords).
 
-Project Analytics: Backend infrastructure ready for data aggregation using MongoDB Aggregation Pipelines to track project efficiency.
+---
 
-Asset Management: Secure image and file handling integrated with Cloudinary and Multer.
+## 🛠️ Tech Stack
 
-# Tech Stack
-Frontend: React.js, Tailwind CSS, Recharts (for data visualization).
+| Category                | Technologies           |
+| ----------------------- | ---------------------- |
+| Frontend                | React.js, Tailwind CSS |
+| Backend                 | Node.js, Express.js    |
+| Database                | MongoDB, Mongoose      |
+| Authentication          | JWT, HTTP-only Cookies |
+| Real-Time Communication | Socket.io              |
+| Charts & Analytics      | Recharts               |
+| File Storage            | Cloudinary             |
+| Email Services          | Nodemailer, Resend SMTP |
 
-Backend: Node.js, Express.js.
+---
 
-Database: MongoDB (Mongoose ODM).
+## 📂 Project Structure
 
-Communication: Socket.io (WebSockets), Nodemailer (SMTP).
+```text
+FullStackProjectManagement/
+│
+├── frontend/                 # React Frontend
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── backend/                 # Express Backend
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── utils/
+│   └── package.json
+│
+├
+├── README.md
+└── package.json
+```
 
-Cloud Services: Cloudinary (Storage), Gmail (Email Relay).
+---
 
-# Challenges & Achievements
-1. The Migration to Production-Ready SMTP
-Challenge: Initially, the system used Mailtrap for email testing, which limited the project to a "sandbox" environment where real users (or interviewers) couldn't receive verification codes.
-Achievement: Successfully migrated the entire notification engine to Gmail SMTP using Google App Passwords. This involved reconfiguring the transport layer to handle SSL (Port 465) and ensuring high deliverability, making the project truly "live."
+## ⚙️ Environment Variables
 
-2. Mastering Real-Time State
-Challenge: Syncing task movements across multiple users without requiring a page refresh.
-Achievement: Implemented a WebSocket layer that broadcasts project changes instantly. This reduced server overhead compared to traditional polling and significantly improved the User Experience (UX).
+Create a `.env` file inside the backend directory.
 
-3. Decoupled Architecture vs. Unified Deployment
-Challenge: Managing CORS issues and deployment complexity when running React and Express on different ports (5173 and 8000).
-Achievement: Developed a strategy to serve the React production build (dist folder) directly through the Express backend using express.static. This unified the origin, eliminated CORS errors, and simplified the deployment pipeline for local network testing.
-
-# Getting Started
-Prerequisites
-Node.js (v16+)
-
-MongoDB Atlas Account
-
-Gmail Account (with 2-Step Verification enabled for App Passwords)
-
-Environment Setup
-Create a .env file in the root directory:
-
-Code snippet
+```env
 PORT=8000
-MONGODB_URI=your_mongodb_connection_string
-ACCESS_TOKEN_SECRET=your_secret
-CLOUDINARY_CLOUD_NAME=your_name
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_16_character_app_password
-Installation
-Bash
- Install backend dependencies
-npm install
 
-Install frontend dependencies
+MONGODB_URI=your_mongodb_connection_string
+
+ACCESS_TOKEN_SECRET=your_access_token_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_EXPIRY=7d
+
+CLIENT_URL=http://localhost:5173(make sure to change this in cors and .env)
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_gmail_app_password
+```
+
+Adjust the variables according to your project configuration.
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+Make sure the following are installed:
+
+* Node.js (v18 or later recommended)
+* npm
+* MongoDB Atlas or a local MongoDB instance
+* Cloudinary Account
+* Resend or mailtrap account
+
+---
+
+## Clone the Repository
+
+```bash
+git clone https://github.com/Dhanwin007/FullStackProjectManagement.git
+```
+
+```bash
+cd taskflow
+```
+
+---
+
+## Install Backend Dependencies
+
+```bash
+cd server
+npm install
+```
+
+---
+
+## Install Frontend Dependencies
+
+Open another terminal.
+
+```bash
 cd client
 npm install
+```
 
- Run in development mode
+---
+
+## Start the Backend Server
+
+```bash
+cd server
 npm run dev
-📜 Future Roadmap
-Advanced Analytics: Implementing a full dashboard using MongoDB $group and $match stages.
+```
 
-Role-Based Access Control (RBAC): Defining Admin, Member, and Viewer permissions.
+The backend will start on:
 
-Mobile Responsiveness: Optimizing the Kanban drag-and-drop for touch interfaces.
+```
+http://localhost:8000
+```
+
+---
+
+## Start the Frontend
+
+Open another terminal.
+
+```bash
+cd client
+npm run dev
+```
+
+The frontend will start on:
+
+```
+http://localhost:5173
+```
+
+---
+
+## Build for Production
+
+### Frontend
+
+```bash
+cd client
+npm run build
+```
+
+### Backend
+
+```bash
+cd server
+npm start
+```
+
+---
+
+## 📡 Major Functionalities
+
+### Authentication
+
+* User Registration
+* Login
+* Logout
+* Email Verification-not implemented in frontend so only route exists ; no button to avail it further no ui that opens on email
+* Forgot Password
+* Reset Password
+* JWT Authentication
+* HTTP-only Cookie Authentication
+* Role-Based Access Control (RBAC)
+
+
+### Project Management
+
+* Create Projects
+* Update Projects
+* Delete Projects
+* add and update roles of  Team Members
+* Project Dashboard
+
+### Task Management
+
+* Create Tasks
+* Update Tasks
+* Delete Tasks
+* Drag & Drop Kanban Workflow
+* Task Status Tracking
+
+### Real-Time Collaboration
+
+* Live Team Chat
+* Real-Time Project Synchronization using Socket.io
+
+### Analytics
+
+
+* Task Progress Visualization
+* Completion Metrics
+* Member assignment chart
+
+### File Management
+
+* Upload Images(user avatar and task related pdfs or docs)
+* Upload Attachments
+* Cloudinary Integration
+
+---
+
+
+
+## 💡 Highlights
+
+* Secure authentication using JWT and HTTP-only cookies.
+* Real-time communication powered by Socket.io.
+* Interactive Kanban board for task management.
+* Analytics dashboard for monitoring project progress.
+* Cloudinary integration for secure file storage.
+* Responsive design for desktop and mobile devices.
+
+---
+
+## 🔮 Future Improvements
+
+
+* Activity Logs
+* Push Notifications
+* Calendar View
+* Team Invitations
+* Dark Mode
+* Advanced Analytics
+* Search and Filtering
+* Project Templates
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a new branch.
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Commit your changes.
+
+```bash
+git commit -m "Add your feature"
+```
+
+4. Push the branch.
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request.
+
+---
+
+
+
+## 👨‍💻 Author
+
+Developed by Dhanwin G
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
